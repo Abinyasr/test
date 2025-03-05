@@ -10,7 +10,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 //git 'https://github.com/Abinyasr/test.git'
-                sh 'echo "Checkout""
+                sh 'echo "Checkout"'
             }
         }
 
