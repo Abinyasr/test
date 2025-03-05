@@ -1,0 +1,75 @@
+pipeline {
+    agent any
+
+    environment {
+        // Environment variables (optional)
+        MAVEN_HOME = '/usr/local/apache-maven'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                // Checkout the source code from GitHub
+                git 'https://github.com/your/repository.git'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                // Build the project using Maven
+                script {
+                    sh "'${MAVEN_HOME}/bin/mvn' clean install"
+                }
+            }
+        }
+
+        stage('Test') {
+            steps {
+                // Run unit tests using Maven
+                script {
+                    sh "'${MAVEN_HOME}/bin/mvn' test"
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                // Deploy the application (this is just an example)
+                script {
+                    echo 'Deploying to staging environment...'
+                    sh './deploy.sh' // Replace with your actual deploy command
+                }
+            }
+        }
+
+        stage('Archive Artifacts') {
+            steps {
+                // Archive build artifacts (e.g., JAR files) for later use
+                archiveArtifacts artifacts: '**/*.jar', allowEmptyArchive: true
+            }
+        }
+    }
+
+    post {
+        success {
+            // Actions to perform if the pipeline succeeds
+            echo 'Build and deployment successful!'
+            // Example: Notify on success
+            mail to: 'team@example.com', subject: 'Build Success', body: 'The pipeline was successful.'
+        }
+
+        failure {
+            // Actions to perform if the pipeline fails
+            echo 'Build or deployment failed!'
+            // Example: Notify on failure
+            mail to: 'team@example.com', subject: 'Build Failed', body: 'There was an issue with the build or deployment.'
+        }
+
+        always {
+            // Actions that will always be executed, regardless of success or failure
+            echo 'Cleaning up after build...'
+            // Example: Clean workspace
+            cleanWs()
+        }
+    }
+}
