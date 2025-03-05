@@ -1,53 +1,27 @@
 pipeline {
     agent any
 
-
     stages {
         stage('Checkout') {
             steps {
-                // Checkout the source code from version control (e.g., GitHub)
-                git 'https://github.com/Abinyasr/test.git'
+                // Checkout code from the repository
+               // git 'https://github.com/Abinyasr/test.git'
+               sh ' echo Checkout project...'
             }
         }
 
         stage('Build') {
             steps {
-                // Build your project (example: Maven build for Java)
-                script {
-                    // You can use a build tool like Maven, Gradle, etc.
-                    sh 'mvn clean install'
-                }
+                // Run a basic build command (example for a Node.js project)
+                sh 'echo Building project...'
             }
         }
 
         stage('Test') {
             steps {
-                // Run your tests here (example: using Maven for unit tests)
-                script {
-                    sh 'mvn test'
-                }
+                // Run tests (example for a Node.js project)
+                sh 'echo Running tests...'
             }
-        }
-
-        stage('Deploy') {
-            steps {
-                // Deploy your project (example: to a staging environment)
-                script {
-                    sh './deploy.sh'  // Assume you have a deployment script
-                }
-            }
-        }
-    }
-
-    post {
-        success {
-            // Notify on success (could be via email, Slack, etc.)
-            echo 'Build and deployment successful!'
-        }
-
-        failure {
-            // Notify on failure (could be via email, Slack, etc.)
-            echo 'Build or deployment failed!'
         }
     }
 }
